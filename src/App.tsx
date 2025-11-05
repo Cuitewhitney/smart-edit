@@ -1,4 +1,3 @@
-// src/App.tsx (Updated – copy this over)
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -22,9 +21,8 @@ function App() {
       });
       setOutput(res.data.enhanced);
     } catch (err) {
-      // Enhanced error handling
-      setError('Oops! Backend seems disconnected!"');
-      setOutput(''); // Clear previous output
+      setError('Oops! 404 NOT FOUND');
+      setOutput('');
     } finally {
       setLoading(false);
     }
@@ -33,7 +31,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-8">
       <div className="max-w-2xl mx-auto p-6 font-sans">
-        <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center">
+        <h1 className="text-3xl font-bold text-blue-600 mb-6 text-center animate-fade-in">
           Welcome to Smart Edit!
         </h1>
         
@@ -42,21 +40,28 @@ function App() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type anything..."
-            className="w-full p-4 border-2 border-gray-300 rounded-lg text-lg focus:border-blue-500 focus:outline-none"
+            className="w-full p-4 border-2 border-gray-300 rounded-lg text-lg focus:border-blue-500 focus:outline-none transition-all duration-300"
             rows={4}
           />
 
           <button
             onClick={callAI}
             disabled={loading || !input.trim()}
-            className="mt-4 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-md transition-all"
+            className="mt-4 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all duration-300 hover:scale-105"
           >
-            {loading ? 'Simulating AI...' : ' Enhance with AI'}
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                Simulating AI...
+              </span>
+            ) : (
+              'Enhance with AI'
+            )}
           </button>
         </div>
 
         {error && (
-          <div className="p-4 bg-yellow-50 border-2 border-yellow-200 rounded-lg">
+          <div className="p-4 bg-yellow-50 border-2 border-yellow-200 rounded-lg animate-pulse">
             <p className="font-semibold text-yellow-800">{error}</p>
           </div>
         )}
@@ -69,12 +74,15 @@ function App() {
         )}
       </div>
 
-      <style jsx>{`
+      {/* Custom CSS for fade-in (Tailwind-safe) */}
+      <style>{`
         @keyframes fade-in {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in { animation: fade-in 0.3s ease-out; }
+        .animate-fade-in {
+          animation: fade-in 0.5s ease-out;
+        }
       `}</style>
     </div>
   );
